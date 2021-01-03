@@ -1,14 +1,24 @@
 #include <iostream>
-#include <memory>
 #include "include/TimeZoneConverter.hpp"
-#include "include/PdtTimeZone.hpp"
+#include "include/TimeZone.hpp"
+#include "include/AvailableTimeZones.hpp"
+#include "include/Time.hpp"
 
 
-int main(){
-    // auto tzc = TimeZoneConverter();
-    // availableTimeZones = std::map<char*, TimeZoneBase
-    auto pdtTimeZone = PdtTimeZone(-8);
-    auto gmtTimeZone = PdtTimeZone(0);
-    std::cout << pdtTimeZone.GetTimeInUTCFormat() << std::endl;
-    std::cout << gmtTimeZone.GetTimeInUTCFormat() << std::endl;
+int main()
+{
+
+    std::cout << AvailableTimeZones << std::endl;
+    
+    auto destTime = TimeZoneConverter::convert(Time(10,30), 
+                                               AvailableTimeZones.at("PDT"), 
+                                               AvailableTimeZones.at("GMT"));
+
+    std::cout << destTime << std::endl;
+
+    // std::cout << AvailableTimeZones.at("PDT") << std::endl;
+    // std::cout << AvailableTimeZones.at("GMT") << std::endl;
+
+    // std::cout << AvailableTimeZones.at("PDT").GetTimeInUTCFormat() << std::endl;
+    // std::cout << AvailableTimeZones.at("GMT").GetTimeInUTCFormat() << std::endl;
 }

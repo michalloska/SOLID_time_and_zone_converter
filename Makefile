@@ -1,4 +1,4 @@
-CXX=g++ -std=c++11 
+CXX=g++ -std=c++17
 DEP_FLAGS=-MMD
 DEP_FLAGS+=-MP
 CXXFLAGS+=-g

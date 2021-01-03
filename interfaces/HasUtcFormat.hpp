@@ -4,5 +4,5 @@ class HasUtcFormat
 {
 public:
     virtual ~HasUtcFormat() = default;
-    virtual int GetTimeInUTCFormat() = 0;
+    virtual int GetTimeInUTCFormat() const = 0;
 };
