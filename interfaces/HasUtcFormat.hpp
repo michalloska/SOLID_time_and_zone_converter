@@ -1,8 +1,9 @@
 #pragma once
+#include "include/Time.hpp"
 
 class HasUtcFormat
 {
 public:
     virtual ~HasUtcFormat() = default;
-    virtual int GetTimeInUTCFormat() const = 0;
+    virtual Time GetTimeInUTCFormat() const = 0;
 };

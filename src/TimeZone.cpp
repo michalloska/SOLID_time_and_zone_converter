@@ -1,12 +1,13 @@
 #include "include/TimeZone.hpp"
+#include <cmath>
 
-
-TimeZone::TimeZone(int utcOffset): utcTimeOffset(utcOffset)
+TimeZone::TimeZone(Time utcOffset, char * name): utcTimeOffset(utcOffset),
+                                                 timeZoneName(name)
 {
 
 }
 
-int TimeZone::GetTimeInUTCFormat() const
+Time TimeZone::GetTimeInUTCFormat() const
 {
     return utcTimeOffset;
 }
@@ -14,10 +15,17 @@ int TimeZone::GetTimeInUTCFormat() const
 std::ostream& operator<<(std::ostream & out, const TimeZone & timeZone)
 {
     auto rawUtcValue = timeZone.GetTimeInUTCFormat();
-    if (rawUtcValue >= 0)
+    if (rawUtcValue.second != 0)
     {
         out << "+";
     }
-    out << rawUtcValue;
+    out << rawUtcValue.first << "," << rawUtcValue.second;
     return out;
 }
+
+Time TimeZone::CalculateTimeZoneDifferenceInUtc(const Time & left, const Time & right)
+{
+    return Time(left.first - right.first,
+                left.second - right.second);
+}
+
