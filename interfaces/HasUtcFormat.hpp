@@ -1,9 +1,8 @@
 #pragma once
 
-class HasTimeZone
+class HasUtcFormat
 {
-    int utcTimeOffset; 
 public:
+    virtual ~HasUtcFormat() = default;
     virtual int GetTimeInUTCFormat() = 0;
-    
 };

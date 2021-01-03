@@ -6,6 +6,7 @@ CXXFLAGS+=-Wall
 CXXFLAGS+=$(DEP_FLAGS)
 MAIN=Executable
 SRC=$(wildcard *.cpp)
+SRC+=$(wildcard ./src/*.cpp)
 OBJ=$(SRC:.cpp=.o)
 DEP=$(SRC:.cpp=.d)
 
@@ -15,7 +16,7 @@ $(MAIN): $(OBJ)
 		$(CXX) $? -o $@
 
 $(OBJ): $(SRC)
-		$(CXX) $(CXXFLAGS) -c $*.cpp -o $@
+		$(CXX) $(CXXFLAGS) -I. -c $*.cpp -o $@
 
 .PHONY: clean run backup cB
 
