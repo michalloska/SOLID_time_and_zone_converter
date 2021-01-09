@@ -108,3 +108,46 @@ Time Time::operator-(const Time &r_time) const
     }
     return Time(std::abs(calculatedHours), calculatedMinutes);
 }
+
+Time Time::calculateUtcTimeOffset(const Time &destinationTime, const Time &sourceTime)
+{
+    int calculatedHours = destinationTime.hours - sourceTime.hours;
+    int calculatedMinutes = destinationTime.minutes - sourceTime.minutes;
+    calculatedMinutes = std::abs(calculatedMinutes);
+
+    if (doNumbersHaveOppositeSigns(destinationTime.hours, sourceTime.hours))
+    {
+        return Time(calculatedHours, calculatedMinutes);
+    }
+
+    if (sourceTime.minutes > destinationTime.minutes)
+    {
+        if (calculatedMinutes != 0)
+        {
+            if (calculatedHours < 0)
+                calculatedHours += std::ceil(calculatedMinutes / 60) + 1;
+            else if (calculatedHours > 0)
+                calculatedHours -= std::ceil(calculatedMinutes / 60) + 1;
+            auto minutesOverflow = calculatedMinutes % 60;
+            calculatedMinutes = std::abs(minutesOverflow);
+            return Time(calculatedHours, calculatedMinutes);
+        }
+    }
+    
+    if (sourceTime.minutes < destinationTime.minutes)
+    {   
+        if (calculatedHours < 0)
+        {
+            calculatedHours += std::ceil(calculatedMinutes / 60) + 1;
+            auto minutesOverflow = calculatedMinutes % 60;
+            calculatedMinutes = std::abs(minutesOverflow);
+        }
+        else if (calculatedHours > 0)
+        {
+            calculatedHours -= std::ceil(calculatedMinutes / 60) + 1;
+            auto minutesOverflow = calculatedMinutes % 60;
+            calculatedMinutes = std::abs(minutesOverflow);
+        }
+    }
+    return Time(calculatedHours, calculatedMinutes);
+}

@@ -14,8 +14,13 @@ public:
     bool operator==(const Time &r_time) const;
     bool operator!=(const Time &r_time) const;
     bool isTimeValid(const Time &time) const;
-    Time negate();
+    static Time calculateUtcTimeOffset(const Time &destinationTime, const Time &sourceTime);
 private:
+    Time negate();
+    static bool doNumbersHaveOppositeSigns(int a, int b)
+    {
+        return ((a ^ b) < 0);
+    }
     bool isHourAndMinutesValid(int hours, int minutes) const;
     
     int hours;

@@ -1,26 +1,25 @@
 #pragma once
-#include "include/AvailableTimeZones.hpp"
-#include "include/Time.hpp"
-#include "include/TimeZone.hpp"
+#include "AvailableTimeZones.hpp"
+#include "Time.hpp"
+#include "TimeZone.hpp"
 #include <cmath>
 #include <iostream>
 
 class TimeZoneConverter
 {
 public:
-    static Time convert(const Time& sourceTime, 
-                        const TimeZone& sourceTimeZone,
-                        const TimeZone& destinationTimeZone)
+    static Time convert(const Time &sourceTime,
+                        const TimeZone &sourceTimeZone,
+                        const TimeZone &destinationTimeZone)
     {
-        std::cout << "Converting " << sourceTime << sourceTimeZone.timeZoneName << " to " << destinationTimeZone.timeZoneName << std::endl;
-        auto timeDifference = 
+        std::cout << "Converting " << sourceTime << sourceTimeZone.GetName() << " to " << destinationTimeZone.GetName() << std::endl;
+        auto timeDifference =
             TimeZone::CalculateTimeZoneDifferenceInUtc(
-                sourceTimeZone.GetTimeInUTCFormat(),
-                destinationTimeZone.GetTimeInUTCFormat());
-
+                sourceTimeZone, destinationTimeZone);
+                
+        std::cout << "timeDifference = " << timeDifference << std::endl;
         // TODO: implement operator+
         // return sourceTime + timeDifference
-        return Time(sourceTime.first - timeDifference.first,
-                    sourceTime.second - timeDifference.second);
+        return Time(sourceTime + timeDifference);
     }
 };

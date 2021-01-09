@@ -1,10 +1,9 @@
-#include "include/TimeZone.hpp"
+#include "../include/TimeZone.hpp"
 #include <cmath>
 
-TimeZone::TimeZone(Time utcOffset, char * name): utcTimeOffset(utcOffset),
-                                                 timeZoneName(name)
+TimeZone::TimeZone(Time utcOffset, const char *name) : utcTimeOffset(utcOffset),
+                                                       timeZoneName(name)
 {
-
 }
 
 Time TimeZone::GetTimeInUTCFormat() const
@@ -12,20 +11,27 @@ Time TimeZone::GetTimeInUTCFormat() const
     return utcTimeOffset;
 }
 
-std::ostream& operator<<(std::ostream & out, const TimeZone & timeZone)
+const char *TimeZone::GetName() const
+{
+    return timeZoneName;
+}
+
+Time TimeZone::CalculateTimeZoneDifferenceInUtc(const TimeZone &sourceTimeZone, const TimeZone &destinationTimeZone)
+{
+    auto sourceTime = sourceTimeZone.GetTimeInUTCFormat();
+    auto destinationTime = destinationTimeZone.GetTimeInUTCFormat();
+
+    auto calculatedUtcDifference = Time::calculateUtcTimeOffset(destinationTime, sourceTime);
+    return calculatedUtcDifference;
+}
+
+std::ostream &operator<<(std::ostream &out, const TimeZone &timeZone)
 {
     auto rawUtcValue = timeZone.GetTimeInUTCFormat();
-    if (rawUtcValue.second != 0)
+    if (rawUtcValue.getHours() >= 0)
     {
         out << "+";
     }
-    out << rawUtcValue.first << "," << rawUtcValue.second;
+    out << rawUtcValue.getHours() << ":" << rawUtcValue.getMinutes();
     return out;
 }
-
-Time TimeZone::CalculateTimeZoneDifferenceInUtc(const Time & left, const Time & right)
-{
-    return Time(left.first - right.first,
-                left.second - right.second);
-}
-

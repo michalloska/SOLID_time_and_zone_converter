@@ -11,7 +11,7 @@ SRC+=$(wildcard ./src/*.cpp)
 OBJ=$(SRC:.cpp=.o)
 DEP=$(SRC:.cpp=.d)
 
-TEST_OBJECTS = ./tests/mainGTest.o ./tests/TimeTestSuite.o 
+TEST_OBJECTS = ./tests/mainGTest.o ./tests/TimeTestSuite.o ./tests/TimeZoneTestSuite.o 
 # TEST_OBJECTS=$(wildcard ./tests/*.o)
 GOOGLE_TEST_SRC=$(wildcard ./tests/*.cpp)
 TEST_DEP=$(GOOGLE_TEST_SRC:.cpp=.d)
@@ -41,6 +41,7 @@ backup:
 
 test_build: $(TEST_OBJECTS)
 	$(CXX) $(LXXFLAGS) -o execTest.out $(TEST_OBJECTS) $(wildcard ./src/*.cpp) $(GTEST)
+	./execTest.out
 
 test: 
 	./execTest.out
