@@ -215,7 +215,6 @@ namespace
         ASSERT_TRUE(sut.isTimeValid(validTime));
     }
 
-    // TODO: Refine this test!
     TEST_F(TimeTestSuite, shouldThrowExceptionWhenCreatingTimeWithInvalidValues)
     {
         try

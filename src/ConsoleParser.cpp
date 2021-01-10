@@ -26,23 +26,24 @@ namespace ConsoleParsers
         auto timeArgument = argv[1];
         std::string sourceTimeZoneArgument = argv[2];
         std::string destinationTimeZoneArgument = argv[3];
-        
-        auto hours = std::strtok(timeArgument, ":");
-        if (hours == nullptr)
-            throw std::invalid_argument("Time invalid! accepted format:(hh:mm)");
-        
-        auto minutes = std::strtok(nullptr, ":");
-        if (minutes == nullptr)
-            return std::make_tuple(
-                Time{atoi(hours), 0},
-                TimeZoneConverterUtils::AvailableTimeZones.at(sourceTimeZoneArgument),
-                TimeZoneConverterUtils::AvailableTimeZones.at(destinationTimeZoneArgument));
 
         isTimeZoneImplemented(sourceTimeZoneArgument);
         isTimeZoneImplemented(destinationTimeZoneArgument);
-        
+
+        auto hours = std::strtok(timeArgument, ":");
+        if (hours == nullptr)
+            throw std::invalid_argument("Time invalid! accepted format:(hh:mm)");
+
+        std::string assumedValueIfArgumentNotPresent = "0";
+        auto minutes = std::strtok(nullptr, ":");
+        auto seconds = std::strtok(nullptr, ":");
+        if (minutes == nullptr)
+            minutes = &assumedValueIfArgumentNotPresent[0];
+        if (seconds == nullptr)
+            seconds = &assumedValueIfArgumentNotPresent[0];
+
         return std::make_tuple(
-            Time{atoi(hours), atoi(minutes)},
+            Time{atoi(hours), atoi(minutes), atoi(seconds)},
             TimeZoneConverterUtils::AvailableTimeZones.at(sourceTimeZoneArgument),
             TimeZoneConverterUtils::AvailableTimeZones.at(destinationTimeZoneArgument));
     }

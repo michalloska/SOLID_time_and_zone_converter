@@ -15,6 +15,15 @@ namespace
         ASSERT_EQ(calculatedUtcOffset, expectedUtcOffset);
     }
 
+    TEST(TimeZoneTestWithUnevenTimes, shouldCorrectlyCalculateUtcOffsetBetweenTwoUtcPositiveZonesWithSeconds)
+    {
+        Time expectedUtcOffset{4, 29, 30};
+        auto calculatedUtcOffset = TimeZone::CalculateTimeZoneDifferenceInUtc(
+            timeZones.at("tz_3:30:30"),
+            timeZones.at("tz_8"));
+        ASSERT_EQ(calculatedUtcOffset, expectedUtcOffset);
+    }
+
     TEST(TimeZoneTestWithUnevenTimes, shouldCorrectlyCalculateUtcOffsetBetweenTwoUtcPositiveZonesInversed)
     {
         Time expectedUtcOffset{-4, 30};
@@ -30,6 +39,15 @@ namespace
         auto calculatedUtcOffset = TimeZone::CalculateTimeZoneDifferenceInUtc(
             timeZones.at("tz_-8"),
             timeZones.at("tz_3:30"));
+        ASSERT_EQ(calculatedUtcOffset, expectedUtcOffset);
+    }
+
+    TEST(TimeZoneTestWithUnevenTimes, shouldCorrectlyCalculateUtcOffsetBetweenNegativeandPositiveUtcZonesWithSeconds)
+    {
+        Time expectedUtcOffset{11, 30, 30};
+        auto calculatedUtcOffset = TimeZone::CalculateTimeZoneDifferenceInUtc(
+            timeZones.at("tz_-8"),
+            timeZones.at("tz_3:30:30"));
         ASSERT_EQ(calculatedUtcOffset, expectedUtcOffset);
     }
 
@@ -51,6 +69,15 @@ namespace
         ASSERT_EQ(calculatedUtcOffset, expectedUtcOffset);
     }
 
+    TEST(TimeZoneTestWithUnevenTimes, shouldCorrectlyCalculateUtcOffsetBetweenTwoUtcNegativeZonesWithSeconds)
+    {
+        Time expectedUtcOffset{4, 29, 30};
+        auto calculatedUtcOffset = TimeZone::CalculateTimeZoneDifferenceInUtc(
+            timeZones.at("tz_-8"),
+            timeZones.at("tz_-3:30:30"));
+        ASSERT_EQ(calculatedUtcOffset, expectedUtcOffset);
+    }
+
     TEST(TimeZoneTestWithUnevenTimes, shouldCorrectlyCalculateUtcOffsetBetweenTwoUtcNegativeZonesInversed)
     {
         Time expectedUtcOffset{-4, 30};
@@ -59,8 +86,6 @@ namespace
             timeZones.at("tz_-8"));
         ASSERT_EQ(calculatedUtcOffset, expectedUtcOffset);
     }
-
-    // EVEN TIMES:
 
     TEST(TimeZoneTestWithEvenTimes, shouldCorrectlyCalculateUtcOffsetBetweenTwoUtcPositiveZones)
     {

@@ -95,7 +95,7 @@ Time Time::createTimeObjFromSeconds(int amoutOfSeconds)
     int minutes = std::ceil(amoutOfSeconds / 60);
     amoutOfSeconds -= 60 * minutes;
     int seconds = amoutOfSeconds;
-    return Time{hours,std::abs(minutes),std::abs(seconds)};
+    return Time{hours, std::abs(minutes), std::abs(seconds)};
 }
 
 void Time::removeTimeOverflow()
@@ -148,50 +148,16 @@ Time Time::operator-(const Time &r_time) const
     auto l_timeInSeconds = this->getTotalTimeInSeconds();
     auto r_timeInSeconds = r_time.getTotalTimeInSeconds();
 
-    auto time = Time::createTimeObjFromSeconds(l_timeInSeconds - r_timeInSeconds); 
+    auto time = Time::createTimeObjFromSeconds(l_timeInSeconds - r_timeInSeconds);
     time.removeTimeOverflow();
     return time;
 }
 
 Time Time::calculateUtcTimeOffset(const Time &destinationTime, const Time &sourceTime)
 {
-    int calculatedHours = destinationTime.hours - sourceTime.hours;
-    int calculatedMinutes = destinationTime.minutes - sourceTime.minutes;
-    calculatedMinutes = std::abs(calculatedMinutes);
+    auto destinationTimeInSeconds = destinationTime.getTotalTimeInSeconds();
+    auto sourceTimeInSeconds = sourceTime.getTotalTimeInSeconds();
 
-    if (doNumbersHaveOppositeSigns(destinationTime.hours, sourceTime.hours))
-    {
-        return Time(calculatedHours, calculatedMinutes);
-    }
-
-    if (sourceTime.minutes > destinationTime.minutes)
-    {
-        if (calculatedMinutes != 0)
-        {
-            if (calculatedHours < 0)
-                calculatedHours += std::ceil(calculatedMinutes / 60) + 1;
-            else if (calculatedHours > 0)
-                calculatedHours -= std::ceil(calculatedMinutes / 60) + 1;
-            auto minutesOverflow = calculatedMinutes % 60;
-            calculatedMinutes = std::abs(minutesOverflow);
-            return Time(calculatedHours, calculatedMinutes);
-        }
-    }
-
-    if (sourceTime.minutes < destinationTime.minutes)
-    {
-        if (calculatedHours < 0)
-        {
-            calculatedHours += std::ceil(calculatedMinutes / 60) + 1;
-            auto minutesOverflow = calculatedMinutes % 60;
-            calculatedMinutes = std::abs(minutesOverflow);
-        }
-        else if (calculatedHours > 0)
-        {
-            calculatedHours -= std::ceil(calculatedMinutes / 60) + 1;
-            auto minutesOverflow = calculatedMinutes % 60;
-            calculatedMinutes = std::abs(minutesOverflow);
-        }
-    }
-    return Time(calculatedHours, calculatedMinutes);
+    auto time = Time::createTimeObjFromSeconds(destinationTimeInSeconds - sourceTimeInSeconds);
+    return time;
 }
