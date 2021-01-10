@@ -6,7 +6,6 @@
 
 int main(int argc, char **argv)
 {
-
     auto consoleParameters =
         ConsoleParsers::TimeConversionConsoleParser::ParseTimeConversionArguments(argc, argv);
     std::cout << "Converting " << std::get<0>(consoleParameters) << " " << std::get<1>(consoleParameters) << " to " << std::get<2>(consoleParameters) << std::endl;
