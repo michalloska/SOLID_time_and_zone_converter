@@ -50,7 +50,7 @@ std::ostream &operator<<(std::ostream &out, const Time &time)
 {
     auto paddingChar = '0';
     auto paddingLength = 2;
-    out << "Time: " << time.getHours() << ":" << std::setfill(paddingChar) << std::setw(paddingLength) << time.getMinutes();
+    out << time.getHours() << ":" << std::setfill(paddingChar) << std::setw(paddingLength) << time.getMinutes();
     return out;
 }
 

@@ -1,8 +1,8 @@
 #include <iostream>
 #include "include/TimeZoneConverter.hpp"
 #include "include/TimeZone.hpp"
-#include "include/AvailableTimeZones.hpp"
 #include "include/Time.hpp"
+#include "include/ConsoleParser.hpp"
 
 TimeZonesMap AvailableTimeZones =
     {
@@ -10,19 +10,15 @@ TimeZonesMap AvailableTimeZones =
         {"GMT", TimeZone(Time(0, 0), "GMT")},
         {"IRST", TimeZone(Time(3, 30), "IRST")}};
 
-int main()
+int main(int argc, char **argv)
 {
 
-    std::cout << AvailableTimeZones << std::endl;
+    auto consoleParameters =
+        ConsoleParsers::TimeConversionConsoleParser::ParseTimeConversionArguments(argc, argv);
+    std::cout << "Converting " << std::get<0>(consoleParameters) << " " << std::get<1>(consoleParameters) << " to " << std::get<2>(consoleParameters) << std::endl;
+    auto destTime = TimeZoneConverter::convert(std::get<0>(consoleParameters),
+                                               std::get<1>(consoleParameters),
+                                               std::get<2>(consoleParameters));
 
-    auto destTime = TimeZoneConverter::convert(Time(10, 30),
-                                               AvailableTimeZones.at("PDT"),
-                                               AvailableTimeZones.at("IRST"));
-
-    std::cout << destTime << std::endl;
-    auto destTimeInversed = TimeZoneConverter::convert(Time(22, 00),
-                                                       AvailableTimeZones.at("IRST"),
-                                                       AvailableTimeZones.at("PDT"));
-
-    std::cout << destTimeInversed << std::endl;
+    std::cout << "Outcome Time:" << destTime << std::endl;
 }

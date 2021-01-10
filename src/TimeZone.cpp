@@ -11,7 +11,7 @@ Time TimeZone::GetTimeInUTCFormat() const
     return utcTimeOffset;
 }
 
-const char *TimeZone::GetName() const
+const char *TimeZone::getName() const
 {
     return timeZoneName;
 }
@@ -28,11 +28,10 @@ Time TimeZone::CalculateTimeZoneDifferenceInUtc(const TimeZone &sourceTimeZone, 
 std::ostream &operator<<(std::ostream &out, const TimeZone &timeZone)
 {
     auto rawUtcValue = timeZone.GetTimeInUTCFormat();
+    out << timeZone.getName() << "(UTC";
     if (rawUtcValue.getHours() >= 0)
-    {
         out << "+";
-    }
-    out << rawUtcValue.getHours() << ":" << rawUtcValue.getMinutes();
+    out << timeZone.GetTimeInUTCFormat() << ")";
     return out;
 }
 

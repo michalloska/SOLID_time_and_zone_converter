@@ -30,7 +30,7 @@ clean:
 	rm -f $(MAIN) $(OBJ) $(TEST_OBJECTS) $(TEST_DEP) $(DEP)
 
 run: $(MAIN)
-	./$(MAIN)
+	./$(MAIN) $(TIME) $(SRCT) $(DESTT)
 
 backup:
 	if [ -d "./backup" ]; then rm -r backup; fi

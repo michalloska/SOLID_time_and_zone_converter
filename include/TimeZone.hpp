@@ -5,7 +5,7 @@
 #include <map>
 
 class TimeZone;
-using TimeZonesMap = std::map<const char *, TimeZone>;
+using TimeZonesMap = std::map<std::string, TimeZone>;
 
 class TimeZone : public HasUtcFormat
 {
@@ -14,7 +14,7 @@ public:
     TimeZone() = delete;
     TimeZone(Time utcOffset, const char *name);
     Time GetTimeInUTCFormat() const override;
-    const char *GetName() const;
+    const char *getName() const;
     static Time CalculateTimeZoneDifferenceInUtc(const TimeZone &l_timeZone, const TimeZone &r_timeZone);
 
 protected:

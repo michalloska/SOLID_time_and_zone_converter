@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 #include "../include/TimeZoneConverter.hpp"
-#include "../include/AvailableTimeZones.hpp"
+#include "../include/TimeZoneConverterUtils.hpp"
 #include "TimeZoneTestsUtils.hpp"
 
 namespace
