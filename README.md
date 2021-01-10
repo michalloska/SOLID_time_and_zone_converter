@@ -2,7 +2,7 @@
 Implement a simple converter allowing time convertion from GMT (Greenwich Mean) to  PDT (Pacific Daylight Time (North America)) and vice-versa. Converter should be implemented  in a way that allows extending it easily when adding new time zones.
 ___
 ## REMARK
-Writing this project in c++ turned out to be much more complicated than anticipated at first.Therefore the project is not perfect and I am fully conscious about it. Implementation of Time etc was very time consuming
+Writing this project in c++ turned out to be much more complicated/time consuming than anticipated at first.Therefore the project is not perfect and I am fully conscious about it. Implementation of Time etc was very time consuming
 ___
 ## Author:
 Michał Loska
@@ -52,4 +52,19 @@ Run UT tests:
 
 Remark: in order to run UT tests Google Test has to be installed.
 
-**Instruction on how to run them will be added soon**
+1. Clone the Google Test repo one catalogue above this project's repo
+>git clone https://github.com/google/googletest ..
+
+2. Go to the downloaded repo and create build directory
+> cd .. googletest-master && mkdir build
+
+3. Enter the folder and execute cmake
+> cd build && cmake ..
+
+4. Compile
+> make
+
+5. Done :) 
+
+Header files path is also specified in mainGTest.cpp. <br>
+Path to google test library is already specified in Makefile in GTEST variable
