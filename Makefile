@@ -4,15 +4,14 @@ DEP_FLAGS+=-MP
 CXXFLAGS+=-g
 CXXFLAGS+=-Wall
 CXXFLAGS+=$(DEP_FLAGS)
-LXXFLAGS= -std=gnu++2a -pthread
+LXXFLAGS= -std=gnu++2a -I h -pthread
 MAIN=Executable
 SRC=$(wildcard *.cpp)
 SRC+=$(wildcard ./src/*.cpp)
 OBJ=$(SRC:.cpp=.o)
 DEP=$(SRC:.cpp=.d)
 
-TEST_OBJECTS = ./tests/mainGTest.o ./tests/TimeTestSuite.o ./tests/TimeZoneTestSuite.o 
-# TEST_OBJECTS=$(wildcard ./tests/*.o)
+TEST_OBJECTS = ./tests/mainGTest.o ./tests/TimeTestSuite.o ./tests/TimeZoneTestSuite.o ./tests/TimeZoneConverterTestSuite.o 
 GOOGLE_TEST_SRC=$(wildcard ./tests/*.cpp)
 TEST_DEP=$(GOOGLE_TEST_SRC:.cpp=.d)
 GTEST = ../googletest-master/build/lib/libgtest.a
@@ -39,13 +38,12 @@ backup:
 	cp $(SRC) backup
 	cp *.h backup
 
-test_build: $(TEST_OBJECTS)
+test: $(TEST_OBJECTS)
 	$(CXX) $(LXXFLAGS) -o execTest.out $(TEST_OBJECTS) $(wildcard ./src/*.cpp) $(GTEST)
 	./execTest.out
 
-test: 
+run_test: 
 	./execTest.out
-
 
 $(TEST_OBJECTS): $(GOOGLE_TEST_SRC) $(SRC)
 	$(CXX) $(CXXFLAGS) -Iinclude -Itests -c $*.cpp -o $@

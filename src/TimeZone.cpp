@@ -35,3 +35,11 @@ std::ostream &operator<<(std::ostream &out, const TimeZone &timeZone)
     out << rawUtcValue.getHours() << ":" << rawUtcValue.getMinutes();
     return out;
 }
+
+std::ostream &operator<<(std::ostream &out, const TimeZonesMap &TimeZoneMap)
+{
+    out << "Available Time Zones:" << std::endl;
+    for (auto &timeZone : TimeZoneMap)
+        out << timeZone.first << ": UTC" << timeZone.second << std::endl;
+    return out;
+}

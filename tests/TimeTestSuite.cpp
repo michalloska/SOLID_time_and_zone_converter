@@ -4,7 +4,6 @@
 
 namespace
 {
-
     constexpr int Hour{10};
     constexpr int Minutes{30};
     const Time positiveTime{4, 0};

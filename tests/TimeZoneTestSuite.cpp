@@ -1,21 +1,10 @@
 #include "gtest/gtest.h"
 #include "../include/TimeZone.hpp"
-#include "../include/AvailableTimeZones.hpp"
+#include "TimeZoneTestsUtils.hpp"
 
 namespace
 {
-
-    // TODO: change to TEST_P
-    TimeZonesMap timeZones =
-        {
-            {"tz_-8", TimeZone(Time(-8, 0), "tz_-8")},
-            {"tz_-4", TimeZone(Time(-4, 0), "tz_-4")},
-            {"tz_-3:30", TimeZone(Time(-3, 30), "tz_-3:30")},
-            {"tz_0", TimeZone(Time(0, 0), "tz_0")},
-            {"tz_3:30", TimeZone(Time(3, 30), "tz_3:30")},
-            {"tz_4", TimeZone(Time(4, 0), "tz_4")},
-            {"tz_8", TimeZone(Time(8, 0), "tz_8")}};
-
+    using namespace TimeZoneTestUtils;
 
     TEST(TimeZoneTestWithUnevenTimes, shouldCorrectlyCalculateUtcOffsetBetweenTwoUtcPositiveZones)
     {
@@ -70,7 +59,6 @@ namespace
             timeZones.at("tz_-8"));
         ASSERT_EQ(calculatedUtcOffset, expectedUtcOffset);
     }
-
 
     // EVEN TIMES:
 
@@ -127,5 +115,4 @@ namespace
             timeZones.at("tz_-8"));
         ASSERT_EQ(calculatedUtcOffset, expectedUtcOffset);
     }
-
 } // namespace

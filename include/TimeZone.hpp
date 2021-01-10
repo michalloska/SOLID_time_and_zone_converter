@@ -2,6 +2,10 @@
 #include "../interfaces/HasUtcFormat.hpp"
 #include "Time.hpp"
 #include <ostream>
+#include <map>
+
+class TimeZone;
+using TimeZonesMap = std::map<const char *, TimeZone>;
 
 class TimeZone : public HasUtcFormat
 {
@@ -19,3 +23,4 @@ protected:
 };
 
 std::ostream &operator<<(std::ostream &out, const TimeZone &timeZone);
+std::ostream &operator<<(std::ostream &out, const TimeZonesMap &TimeZoneMap);
