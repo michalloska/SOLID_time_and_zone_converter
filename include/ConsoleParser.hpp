@@ -29,5 +29,5 @@ namespace ConsoleParsers
     private:
         static bool isTimeZoneImplemented(std::string timeZoneName);
     };
-
+    
 } // namespace ConsoleParsers

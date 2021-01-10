@@ -11,7 +11,7 @@ SRC+=$(wildcard ./src/*.cpp)
 OBJ=$(SRC:.cpp=.o)
 DEP=$(SRC:.cpp=.d)
 
-TEST_OBJECTS = ./tests/mainGTest.o ./tests/TimeTestSuite.o ./tests/TimeZoneTestSuite.o ./tests/TimeZoneConverterTestSuite.o 
+TEST_OBJECTS = ./tests/mainGTest.o ./tests/TimeTestSuite.o ./tests/TimeZoneTestSuite.o ./tests/TimeZoneConverterTestSuite.o ./tests/ConsoleParserTestSuite.o 
 GOOGLE_TEST_SRC=$(wildcard ./tests/*.cpp)
 TEST_DEP=$(GOOGLE_TEST_SRC:.cpp=.d)
 GTEST = ../googletest-master/build/lib/libgtest.a

@@ -24,3 +24,4 @@ protected:
 
 std::ostream &operator<<(std::ostream &out, const TimeZone &timeZone);
 std::ostream &operator<<(std::ostream &out, const TimeZonesMap &TimeZoneMap);
+bool operator==(const TimeZone & l_timeZone, const TimeZone & r_timeZone);

@@ -42,3 +42,9 @@ std::ostream &operator<<(std::ostream &out, const TimeZonesMap &TimeZoneMap)
         out << timeZone.first << ": UTC" << timeZone.second << std::endl;
     return out;
 }
+
+bool operator==(const TimeZone & l_timeZone, const TimeZone & r_timeZone)
+{
+    return l_timeZone.GetTimeInUTCFormat() == r_timeZone.GetTimeInUTCFormat() and
+           l_timeZone.getName() == r_timeZone.getName();
+}
