@@ -3,7 +3,7 @@
 #include <stdexcept>
 #include <iomanip>
 
-Time::Time(int hours, int minutes)
+Time::Time(int hours, int minutes, int seconds)
 {
     if (not isHourAndMinutesValid(hours, minutes))
     {
@@ -11,6 +11,7 @@ Time::Time(int hours, int minutes)
     }
     this->hours = hours;
     this->minutes = minutes;
+    this->seconds = seconds;
 }
 
 int Time::getHours() const
@@ -21,6 +22,11 @@ int Time::getHours() const
 int Time::getMinutes() const
 {
     return minutes;
+}
+
+int Time::getSeconds() const
+{
+    return seconds;
 }
 
 bool Time::isTimeValid(const Time &time) const
@@ -50,31 +56,49 @@ std::ostream &operator<<(std::ostream &out, const Time &time)
 {
     auto paddingChar = '0';
     auto paddingLength = 2;
-    out << time.getHours() << ":" << std::setfill(paddingChar) << std::setw(paddingLength) << time.getMinutes();
+    out << time.getHours()
+        << ":" << std::setfill(paddingChar) << std::setw(paddingLength) << time.getMinutes()
+        << ":" << std::setfill(paddingChar) << std::setw(paddingLength) << time.getSeconds();
     return out;
 }
 
 bool Time::operator==(const Time &r_time) const
 {
     return this->getHours() == r_time.getHours() and
-           this->getMinutes() == r_time.getMinutes();
+           this->getMinutes() == r_time.getMinutes() and
+           this->getSeconds() == r_time.getSeconds();
 }
 
 bool Time::operator!=(const Time &r_time) const
 {
     return this->getHours() != r_time.getHours() or
-           this->getMinutes() != r_time.getMinutes();
+           this->getMinutes() != r_time.getMinutes() or
+           this->getSeconds() != r_time.getSeconds();
 }
 
-bool Time::operator>(int number) const
+int Time::getTotalTimeInSeconds() const
 {
-    int l_totalMinutes;
+    int totalSeconds;
     if (this->hours >= 0)
-        l_totalMinutes = this->hours * 60 + this->minutes;
+        totalSeconds = this->hours * 3600 + this->minutes * 60 + this->seconds;
     else if (this->hours < 0)
-        l_totalMinutes = this->hours * 60 - this->minutes;
+        totalSeconds = this->hours * 3600 - this->minutes * 60 - this->seconds;
+    return totalSeconds;
+}
 
-    return l_totalMinutes > number;
+Time Time::createTimeObjFromSeconds(int amoutOfSeconds)
+{
+    int hours = std::ceil(amoutOfSeconds / 3600);
+    amoutOfSeconds -= 3600 * hours;
+    int minutes = std::ceil(amoutOfSeconds / 60);
+    amoutOfSeconds -= 60 * minutes;
+    int seconds = amoutOfSeconds;
+    return Time{hours,minutes,seconds};
+}
+
+bool Time::operator>(int amoutOfSeconds) const
+{
+    return this->getTotalTimeInSeconds() > amoutOfSeconds;
 }
 
 bool Time::operator>(const Time &r_time) const
@@ -115,7 +139,7 @@ Time Time::operator+(const Time &r_time) const
     {
         calculatedHours -= std::ceil(calculatedMinutesAbsValue / 60) + 1;
         auto minutesOverflow = calculatedMinutesAbsValue % 60;
-        calculatedMinutes = minutesOverflow; 
+        calculatedMinutes = minutesOverflow;
     }
     if (calculatedHours >= 24)
     {

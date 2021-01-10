@@ -14,6 +14,28 @@ namespace
         Time sut{Hour, Minutes};
     };
 
+    TEST_F(TimeTestSuite, shouldCorrectlyConvertTimeToTotalInSeconds)
+    {
+        const Time time1{3, 10, 30};
+        int expectedTotalTimeInSeconds = 11430;
+        ASSERT_EQ(time1.getTotalTimeInSeconds(), expectedTotalTimeInSeconds);
+    }
+    
+    TEST_F(TimeTestSuite, shouldCorrectlyCreateTimeObjectFromTotalTimeInSeconds)
+    {
+        int TotalTimeInSeconds = 11430;
+        const Time expectedTime{3, 10, 30};
+        ASSERT_EQ(Time::createTimeObjFromSeconds(TotalTimeInSeconds), expectedTime);
+    }
+    
+    TEST_F(TimeTestSuite, shouldCorrectlyAddPositiveTimesWithSeconds)
+    {
+        const Time time1{3, 0, 30};
+        const Time time2{0, 0, 15};
+        const Time timeResult{3, 0, 15};
+        ASSERT_EQ(time1 - time2, timeResult);
+    }
+
     TEST_F(TimeTestSuite, shouldCorrectlyAddPositiveValueTime)
     {
         const Time timeResult{14, 30};
