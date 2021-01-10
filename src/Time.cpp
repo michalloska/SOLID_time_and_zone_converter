@@ -2,6 +2,8 @@
 #include <cmath>
 #include <stdexcept>
 #include <iomanip>
+// DELETE:
+#include <iostream>
 
 Time::Time(int hours, int minutes, int seconds)
 {
@@ -93,7 +95,20 @@ Time Time::createTimeObjFromSeconds(int amoutOfSeconds)
     int minutes = std::ceil(amoutOfSeconds / 60);
     amoutOfSeconds -= 60 * minutes;
     int seconds = amoutOfSeconds;
-    return Time{hours,minutes,seconds};
+    return Time{hours,std::abs(minutes),std::abs(seconds)};
+}
+
+void Time::removeTimeOverflow()
+{
+    if (this->getHours() >= 24)
+        this->hours = this->hours % 24;
+    else if (this->getHours() <= -24)
+        this->hours = this->hours % 24;
+    if (this->getHours() < 0)
+    {
+        auto timeDifferenceInSeconds = 24 * 3600 + this->getTotalTimeInSeconds();
+        *this = Time::createTimeObjFromSeconds(timeDifferenceInSeconds);
+    }
 }
 
 bool Time::operator>(int amoutOfSeconds) const
@@ -120,54 +135,22 @@ bool Time::operator>(const Time &r_time) const
 
 Time Time::operator+(const Time &r_time) const
 {
-    int calculatedHours = this->hours + r_time.hours;
-    int calculatedMinutes;
+    auto l_timeInSeconds = this->getTotalTimeInSeconds();
+    auto r_timeInSeconds = r_time.getTotalTimeInSeconds();
 
-    if (r_time.getHours() >= 0)
-        calculatedMinutes = this->minutes + r_time.minutes;
-    else
-        calculatedMinutes = this->minutes - r_time.minutes;
-    auto calculatedMinutesAbsValue = std::abs(calculatedMinutes);
-
-    if (calculatedMinutes >= 60)
-    {
-        calculatedHours += std::ceil(calculatedMinutes / 60);
-        auto minutesOverflow = calculatedMinutes % 60;
-        calculatedMinutes = minutesOverflow;
-    }
-    if (calculatedMinutes < 0 and calculatedMinutes > -60)
-    {
-        calculatedHours -= std::ceil(calculatedMinutesAbsValue / 60) + 1;
-        auto minutesOverflow = calculatedMinutesAbsValue % 60;
-        calculatedMinutes = minutesOverflow;
-    }
-    if (calculatedHours >= 24)
-    {
-        calculatedHours = calculatedHours % 24;
-    }
-    return Time(std::abs(calculatedHours), calculatedMinutes);
+    auto time = Time::createTimeObjFromSeconds(l_timeInSeconds + r_timeInSeconds);
+    time.removeTimeOverflow();
+    return time;
 }
 
 Time Time::operator-(const Time &r_time) const
 {
-    int calculatedHours;
-    if (std::abs(r_time.hours) > std::abs(this->hours))
-        calculatedHours = this->hours - std::abs(r_time.hours);
-    else
-        calculatedHours = this->hours - r_time.hours;
-    int calculatedMinutes = this->minutes - r_time.minutes;
+    auto l_timeInSeconds = this->getTotalTimeInSeconds();
+    auto r_timeInSeconds = r_time.getTotalTimeInSeconds();
 
-    if (calculatedHours < 0)
-    {
-        calculatedHours = 24 + calculatedHours;
-    }
-    if (calculatedMinutes < 0)
-    {
-        calculatedHours -= std::ceil(calculatedMinutes / 60) + 1;
-        auto minutesUnderflow = calculatedMinutes;
-        calculatedMinutes = 60 - std::abs(minutesUnderflow);
-    }
-    return Time(std::abs(calculatedHours), calculatedMinutes);
+    auto time = Time::createTimeObjFromSeconds(l_timeInSeconds - r_timeInSeconds); 
+    time.removeTimeOverflow();
+    return time;
 }
 
 Time Time::calculateUtcTimeOffset(const Time &destinationTime, const Time &sourceTime)

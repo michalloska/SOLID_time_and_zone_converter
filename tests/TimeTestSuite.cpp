@@ -20,6 +20,13 @@ namespace
         int expectedTotalTimeInSeconds = 11430;
         ASSERT_EQ(time1.getTotalTimeInSeconds(), expectedTotalTimeInSeconds);
     }
+
+    TEST_F(TimeTestSuite, shouldCorrectlyConvertNegativeTimeToTotalInSeconds)
+    {
+        const Time time1{-3, 10, 30};
+        int expectedTotalTimeInSeconds = -11430;
+        ASSERT_EQ(time1.getTotalTimeInSeconds(), expectedTotalTimeInSeconds);
+    }
     
     TEST_F(TimeTestSuite, shouldCorrectlyCreateTimeObjectFromTotalTimeInSeconds)
     {
@@ -30,9 +37,32 @@ namespace
     
     TEST_F(TimeTestSuite, shouldCorrectlyAddPositiveTimesWithSeconds)
     {
-        const Time time1{3, 0, 30};
-        const Time time2{0, 0, 15};
-        const Time timeResult{3, 0, 15};
+        const Time time1{3, 2, 30};
+        const Time time2{-0, 1, 15};
+        const Time timeResult{3, 3, 45};
+        ASSERT_EQ(time1 + time2, timeResult);
+    } 
+
+    TEST_F(TimeTestSuite, shouldCorrectlyAddPositiveTimesWithSecondsInversed)
+    {
+        const Time time1{1, 1, 15};
+        const Time time2{-3, 2, 30};
+        const Time timeResult{21, 58, 45};
+        ASSERT_EQ(time1 + time2, timeResult);
+    } 
+    
+    TEST_F(TimeTestSuite, shouldCorrectlySubtractPositiveTimesWithSeconds)
+    {
+        const Time time1{3, 2, 30};
+        const Time time2{0, 1, 15};
+        const Time timeResult{3, 1, 15};
+        ASSERT_EQ(time1 - time2, timeResult);
+    }
+    TEST_F(TimeTestSuite, shouldCorrectlySubtractPositiveTimesWithSecondsInversed)
+    {
+        const Time time1{3, 1, 15};
+        const Time time2{0, 2, 30};
+        const Time timeResult{2, 58, 45};
         ASSERT_EQ(time1 - time2, timeResult);
     }
 
@@ -54,7 +84,7 @@ namespace
         const Time time1{1, 0};
         const Time time2{-2, 30};
         const Time timeResult{22, 30};
-        ASSERT_EQ(time1 - time2, timeResult);
+        ASSERT_EQ(time1 + time2, timeResult);
     }
 
     TEST_F(TimeTestSuite, shouldCorrectlyAddPositiveValueTimeWithMinutesBiggerInRightTime)
@@ -142,7 +172,7 @@ namespace
     TEST_F(TimeTestSuite, shouldCorrectlySubtractTimeToBeforeMidnight)
     {
         const Time timeDifference{-11, 30};
-        const Time timeResult{1, 0};
+        const Time timeResult{23, 0};
         ASSERT_EQ(sut + timeDifference, timeResult);
     }
 
@@ -153,11 +183,18 @@ namespace
         ASSERT_EQ(sut + timeDifference, timeResult);
     }
 
+    TEST_F(TimeTestSuite, shouldCorrectlyAddMorethanNegative24Hours)
+    {
+        const Time timeDifference{-25, 30};
+        const Time timeResult{9, 0};
+        ASSERT_EQ(sut + timeDifference, timeResult);
+    }
+
     TEST_F(TimeTestSuite, shouldCorrectlySubtractMorethan24Hours)
     {
         const Time timeDifference{-25, 30};
-        const Time timeResult{15, 0};
-        ASSERT_EQ(sut + timeDifference, timeResult);
+        const Time timeResult{12, 0};
+        ASSERT_EQ(sut - timeDifference, timeResult);
     }
 
     TEST_F(TimeTestSuite, shouldCorrectlyCompareEqualTimes)

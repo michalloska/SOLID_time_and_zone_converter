@@ -20,6 +20,7 @@ public:
     static Time calculateUtcTimeOffset(const Time &destinationTime, const Time &sourceTime);
     int getTotalTimeInSeconds() const;
     static Time createTimeObjFromSeconds(int amoutOfSeconds);
+    void removeTimeOverflow();
 
 private:
     Time negate();
