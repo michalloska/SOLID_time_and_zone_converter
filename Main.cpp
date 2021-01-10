@@ -4,12 +4,6 @@
 #include "include/Time.hpp"
 #include "include/ConsoleParser.hpp"
 
-TimeZonesMap AvailableTimeZones =
-    {
-        {"PDT", TimeZone(Time(-8, 0), "PDT")},
-        {"GMT", TimeZone(Time(0, 0), "GMT")},
-        {"IRST", TimeZone(Time(3, 30), "IRST")}};
-
 int main(int argc, char **argv)
 {
 
