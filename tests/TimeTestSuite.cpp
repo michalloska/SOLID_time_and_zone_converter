@@ -56,6 +56,14 @@ namespace
         ASSERT_EQ(sut - positiveTimeWithMinutes, timeResult);
     }
 
+    TEST_F(TimeTestSuite, shouldCorrectlyAddNegativeNumber)
+    {
+        const Time time1{22, 00};
+        const Time time2{-11, 30};
+        const Time timeResult{10, 30};
+        ASSERT_EQ(time1 + time2, timeResult);
+    }
+
     TEST_F(TimeTestSuite, shouldCorrectlySubtractBiggerTimeValueFromSmallerValueAndSwitchToPrevDay)
     {
         const Time positiveTimeWithMinutes{12, 50};

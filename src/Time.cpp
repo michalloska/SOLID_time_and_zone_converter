@@ -1,8 +1,6 @@
 #include "../include/Time.hpp"
 #include <cmath>
 #include <stdexcept>
-#include <string>
-#include <iostream>
 #include <iomanip>
 
 Time::Time(int hours, int minutes)
@@ -43,6 +41,11 @@ Time Time::negate()
     return *this;
 }
 
+bool Time::doNumbersHaveOppositeSigns(int a, int b)
+{
+    return ((a ^ b) < 0);
+}
+
 std::ostream &operator<<(std::ostream &out, const Time &time)
 {
     auto paddingChar = '0';
@@ -63,22 +66,56 @@ bool Time::operator!=(const Time &r_time) const
            this->getMinutes() != r_time.getMinutes();
 }
 
+bool Time::operator>(int number) const
+{
+    int l_totalMinutes;
+    if (this->hours >= 0)
+        l_totalMinutes = this->hours * 60 + this->minutes;
+    else if (this->hours < 0)
+        l_totalMinutes = this->hours * 60 - this->minutes;
+
+    return l_totalMinutes > number;
+}
+
+bool Time::operator>(const Time &r_time) const
+{
+    int l_totalMinutes;
+    int r_totalMinutes;
+    if (this->hours >= 0)
+        l_totalMinutes = this->hours * 60 + this->minutes;
+    else if (this->hours < 0)
+        l_totalMinutes = this->hours * 60 - this->minutes;
+
+    if (r_time.hours >= 0)
+        r_totalMinutes = r_time.hours * 60 + r_time.minutes;
+    else if (r_time.hours < 0)
+        r_totalMinutes = r_time.hours * 60 - r_time.minutes;
+
+    return l_totalMinutes > r_totalMinutes;
+}
+
 Time Time::operator+(const Time &r_time) const
 {
     int calculatedHours = this->hours + r_time.hours;
     int calculatedMinutes;
 
-    // FUNCTION:
     if (r_time.getHours() >= 0)
         calculatedMinutes = this->minutes + r_time.minutes;
     else
         calculatedMinutes = this->minutes - r_time.minutes;
+    auto calculatedMinutesAbsValue = std::abs(calculatedMinutes);
 
     if (calculatedMinutes >= 60)
     {
         calculatedHours += std::ceil(calculatedMinutes / 60);
         auto minutesOverflow = calculatedMinutes % 60;
         calculatedMinutes = minutesOverflow;
+    }
+    if (calculatedMinutes < 0 and calculatedMinutes > -60)
+    {
+        calculatedHours -= std::ceil(calculatedMinutesAbsValue / 60) + 1;
+        auto minutesOverflow = calculatedMinutesAbsValue % 60;
+        calculatedMinutes = minutesOverflow; 
     }
     if (calculatedHours >= 24)
     {
@@ -133,9 +170,9 @@ Time Time::calculateUtcTimeOffset(const Time &destinationTime, const Time &sourc
             return Time(calculatedHours, calculatedMinutes);
         }
     }
-    
+
     if (sourceTime.minutes < destinationTime.minutes)
-    {   
+    {
         if (calculatedHours < 0)
         {
             calculatedHours += std::ceil(calculatedMinutes / 60) + 1;
