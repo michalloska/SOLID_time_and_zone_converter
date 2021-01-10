@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../../googletest-master/googletest/include/gtest/gtest.h"
+#include "gtest/gtest.h"
 
 int main(int argc, char **argv)
 {

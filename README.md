@@ -2,7 +2,9 @@
 Implement a simple converter allowing time convertion from GMT (Greenwich Mean) to  PDT (Pacific Daylight Time (North America)) and vice-versa. Converter should be implemented  in a way that allows extending it easily when adding new time zones.
 ___
 ## REMARK
-Writing this project in c++ turned out to be much more complicated/time consuming than anticipated at first.Therefore the project is not perfect and I am fully conscious about it. Implementation of Time etc was very time consuming
+Writing this project in c++ turned out to be much more complicated/time consuming than anticipated at first. Therefore the project is not perfect and I am fully aware of it. Implementation of Time etc was very time consuming. 
+
+Almost all classes were tested except for ConsoleParser which was added in the last moment as I haven't noticed it was a requirement to run the program with console arguments.
 ___
 ## Author:
 Michał Loska
@@ -10,10 +12,10 @@ Michał Loska
 ___
 ## How to Run:
 
-Compile:
+### Compile:
 >make
 
-Compile and/or Run: </br>
+### Compile and/or Run: </br>
 Due to the fact a project like this requires using Makefile the program has to be run a bitt differently to what was written in documize:
 
 >make run TIME=(time_to_be_converted) SRCT=(source_time_zone) DESTT=(destination_time_zone) 
@@ -44,10 +46,10 @@ Supported TimeZones:
 Implemented Time Zones are present in the TimeZoneConverterUtils.hpp file. More can be there.
 If timezone is not supported a suitable output will be displayed
 
-Clean:
+### Clean:
 >make clean
 
-Run UT tests:
+### Run UT tests:
 >make test
 
 Remark: in order to run UT tests Google Test has to be installed.
@@ -64,7 +66,10 @@ Remark: in order to run UT tests Google Test has to be installed.
 4. Compile
 > make
 
-5. Done :) 
+5. Copy Header files to the project directory
+Copy gtest folder from googletest/include/gtest to solid-time-and-zone-converter-task/tests
+> cp -r googletest-master/googletest/include/gtest solid-time-and-zone-converter-task/tests
 
-Header files path is also specified in mainGTest.cpp. <br>
+6. Done!
+
 Path to google test library is already specified in Makefile in GTEST variable

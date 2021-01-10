@@ -2,3 +2,4 @@
 *.d
 Executable
 *.out
+tests/gtest
