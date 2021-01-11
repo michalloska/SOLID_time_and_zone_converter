@@ -5,26 +5,16 @@
 namespace
 {
     using namespace ConsoleParsers;
+    char **consoleArguments = (char *[]){"omit_me", "12:34:56", "GMT", "PDT"};
+    char **consoleArgumentsNoSeconds = (char *[]){"omit_me", "12:34", "GMT", "PDT"};
+    char **consoleArgumentsNoSecondsNoMinutes = (char *[]){"omit_me", "12", "GMT", "PDT"};
+    char **consoleArgumentsIncorrectSourceTimeZone = (char *[]){"omit_me", "12:34:56", "LOL", "PDT"};
+    const int amountOfConsoleArguments = 4;
+    const int amountOfConsoleArgumentsTooSmall = 3;
 
-    struct TimeTestSuite : public ::testing::Test
+    TEST(TimeConversionConsoleParser, shouldProperlyReadInput)
     {
-        char **consoleArguments;
-        char **consoleArgumentsNoSeconds;
-        char **consoleArgumentsNoSecondsNoMinutes;
-        const int amountOfConsoleArguments {4};
-
-        TimeTestSuite()
-        {
-            consoleArguments = (char *[]){"omit_me", "12:34:56", "GMT", "PDT"};
-            consoleArgumentsNoSeconds = (char *[]){"omit_me", "12:34", "GMT", "PDT"};
-            consoleArgumentsNoSecondsNoMinutes = (char *[]){"omit_me", "12", "GMT", "PDT"};
-        }
-    };
-
-    // TODO: TimeZoneConverterUtils::AvailableTimeZones should be a member of ConsoleParser
-    TEST_F(TimeTestSuite, shouldProperlyReadInput)
-    {
-        auto parsedConsoleParameters =
+        TimeConversionConsoleArguments parsedConsoleParameters =
             TimeConversionConsoleParser::ParseTimeConversionArguments(amountOfConsoleArguments,
                                                                       consoleArguments);
         TimeConversionConsoleArguments expectedOutput = std::make_tuple(
@@ -32,10 +22,10 @@ namespace
             TimeZoneConverterUtils::AvailableTimeZones.at("GMT"),
             TimeZoneConverterUtils::AvailableTimeZones.at("PDT"));
 
-        ASSERT_EQ(parsedConsoleParameters, expectedOutput);
+        ASSERT_EQ(std::get<0>(parsedConsoleParameters), std::get<0>(expectedOutput));
     }
 
-    TEST_F(TimeTestSuite, shouldProperlyReadInputWithoutSeconds)
+    TEST(TimeConversionConsoleParser, shouldProperlyReadInputWithoutSeconds)
     {
         auto parsedConsoleParameters =
             TimeConversionConsoleParser::ParseTimeConversionArguments(amountOfConsoleArguments,
@@ -45,10 +35,10 @@ namespace
             TimeZoneConverterUtils::AvailableTimeZones.at("GMT"),
             TimeZoneConverterUtils::AvailableTimeZones.at("PDT"));
 
-        ASSERT_EQ(parsedConsoleParameters, expectedOutput);
+        ASSERT_EQ(std::get<0>(parsedConsoleParameters), std::get<0>(expectedOutput));
     }
 
-    TEST_F(TimeConversionConsoleParser, shouldProperlyReadInputWithoutSecondsAndMinutes)
+    TEST(TimeConversionConsoleParser, shouldProperlyReadInputWithoutSecondsAndMinutes)
     {
         auto parsedConsoleParameters =
             TimeConversionConsoleParser::ParseTimeConversionArguments(amountOfConsoleArguments,
@@ -58,7 +48,44 @@ namespace
             TimeZoneConverterUtils::AvailableTimeZones.at("GMT"),
             TimeZoneConverterUtils::AvailableTimeZones.at("PDT"));
 
-        ASSERT_EQ(parsedConsoleParameters, expectedOutput);
+        ASSERT_EQ(std::get<0>(parsedConsoleParameters), std::get<0>(expectedOutput));
+    }
+
+    TEST(TimeConversionConsoleParser, shouldThrowExceptionWhenProgramArgumentsDifferentThan4)
+    {
+        try
+        {
+            TimeConversionConsoleParser::ParseTimeConversionArguments(amountOfConsoleArgumentsTooSmall,
+                                                                      consoleArgumentsNoSecondsNoMinutes);
+            FAIL();
+        }
+        catch (const std::range_error &e)
+        {
+            EXPECT_STREQ("Program Accepts 3 input parameters, Time (hh:mm), TimeZone(name), TimeZone(name)", e.what());
+        }
+        catch (...)
+        {
+            FAIL() << "Program Accepts 3 input parameters, Time (hh:mm), TimeZone(name), TimeZone(name)";
+        }
+    }
+
+    TEST(TimeConversionConsoleParser, shouldThrowExceptionWhenGivenTimeZoneIsNotImplemented)
+    {
+        try
+        {
+            auto parsedConsoleParameters =
+                TimeConversionConsoleParser::ParseTimeConversionArguments(amountOfConsoleArguments,
+                                                                          consoleArgumentsIncorrectSourceTimeZone);
+            FAIL();
+        }
+        catch (const std::exception &e)
+        {
+            EXPECT_STREQ("LOL Is not a supported TimeZone (please add it in TimeZoneConverterUtils.hpp)", e.what());
+        }
+        catch (...)
+        {
+            FAIL() << "LOL Is not a supported TimeZone (please add it in TimeZoneConverterUtils.hpp)";
+        }
     }
 
 } // namespace

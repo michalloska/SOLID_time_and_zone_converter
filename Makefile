@@ -4,6 +4,9 @@ DEP_FLAGS+=-MP
 CXXFLAGS+=-g
 CXXFLAGS+=-Wall
 CXXFLAGS+=$(DEP_FLAGS)
+CXX_TEST=g++ -std=gnu++2a 
+CXX_TEST+=-w 
+CXX_FLAGS_GT+=-w 
 LXXFLAGS= -std=gnu++2a -I h -pthread
 MAIN=Executable
 SRC=$(wildcard *.cpp)
@@ -39,14 +42,14 @@ backup:
 	cp *.h backup
 
 test: $(TEST_OBJECTS)
-	$(CXX) $(LXXFLAGS) -o execTest.out $(TEST_OBJECTS) $(wildcard ./src/*.cpp) $(GTEST)
+	$(CXX_TEST) $(LXXFLAGS) -o execTest.out $(TEST_OBJECTS) $(wildcard ./src/*.cpp) $(GTEST)
 	./execTest.out
 
 run_test: 
 	./execTest.out
 
 $(TEST_OBJECTS): $(GOOGLE_TEST_SRC) $(SRC)
-	$(CXX) $(CXXFLAGS) -Iinclude -Itests -c $*.cpp -o $@
+	$(CXX) $(CXX_FLAGS_GT) -Iinclude -Itests -c $*.cpp -o $@
 
 cB:
 	rm -r backup

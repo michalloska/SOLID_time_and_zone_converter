@@ -4,6 +4,7 @@
 #include <cstring>
 #include <iostream>
 #include <stdlib.h>
+#include <sstream>
 
 namespace ConsoleParsers
 {
@@ -23,27 +24,33 @@ namespace ConsoleParsers
         if (argc != 4)
             throw std::range_error("Program Accepts 3 input parameters, Time (hh:mm), TimeZone(name), TimeZone(name)");
 
-        auto timeArgument = argv[1];
+        std::string timeArgument = argv[1];
+        auto timeSections = splitStringByDelimiter(timeArgument, ':');
+        auto hours = timeSections.at(0);
+        std::string minutes;
+        std::string seconds;
+        if (timeSections.size() == 3)
+        {
+            minutes = timeSections.at(1);
+            seconds = timeSections.at(2);
+        }
+        else if (timeSections.size() == 2)
+        {
+            minutes = timeSections.at(1);
+            seconds = "0";
+        }
+        else if (timeSections.size() == 1)
+        {
+            minutes = "0";
+            seconds = "0";
+        }
         std::string sourceTimeZoneArgument = argv[2];
         std::string destinationTimeZoneArgument = argv[3];
-
         isTimeZoneImplemented(sourceTimeZoneArgument);
         isTimeZoneImplemented(destinationTimeZoneArgument);
 
-        auto hours = std::strtok(timeArgument, ":");
-        if (hours == nullptr)
-            throw std::invalid_argument("Time invalid! accepted format:(hh:mm)");
-
-        std::string assumedValueIfArgumentNotPresent = "0";
-        auto minutes = std::strtok(nullptr, ":");
-        auto seconds = std::strtok(nullptr, ":");
-        if (minutes == nullptr)
-            minutes = &assumedValueIfArgumentNotPresent[0];
-        if (seconds == nullptr)
-            seconds = &assumedValueIfArgumentNotPresent[0];
-
         return std::make_tuple(
-            Time{atoi(hours), atoi(minutes), atoi(seconds)},
+            Time{std::stoi(hours), std::stoi(minutes), std::stoi(seconds)},
             TimeZoneConverterUtils::AvailableTimeZones.at(sourceTimeZoneArgument),
             TimeZoneConverterUtils::AvailableTimeZones.at(destinationTimeZoneArgument));
     }
@@ -56,9 +63,21 @@ namespace ConsoleParsers
         }
         catch (const std::exception &e)
         {
-            std::cout << timeZoneName << " Is not a supported TimeZone (please add it in TimeZoneConverterUtils.hpp)" << '\n';
+            throw std::invalid_argument(timeZoneName + " Is not a supported TimeZone (please add it in TimeZoneConverterUtils.hpp)");
         }
         return true;
+    }
+
+    std::vector<std::string> splitStringByDelimiter(const std::string &text, char delimiter)
+    {
+        std::stringstream ss(text);
+        std::string item;
+        std::vector<std::string> elems;
+        while (std::getline(ss, item, delimiter))
+        {
+            elems.push_back(item);
+        }
+        return elems;
     }
 
 } // namespace ConsoleParsers

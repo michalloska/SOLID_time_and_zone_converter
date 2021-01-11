@@ -26,8 +26,11 @@ namespace ConsoleParsers
     public:
         TimeConversionConsoleParser() = delete;
         static TimeConversionConsoleArguments ParseTimeConversionArguments(int argc, char **argv);
+
     private:
         static bool isTimeZoneImplemented(std::string timeZoneName);
     };
-    
+
+    std::vector<std::string> splitStringByDelimiter(const std::string &text, char delim);
+
 } // namespace ConsoleParsers
