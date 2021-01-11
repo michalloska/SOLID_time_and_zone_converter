@@ -22,7 +22,7 @@ namespace ConsoleParsers
     TimeConversionConsoleArguments TimeConversionConsoleParser::ParseTimeConversionArguments(int argc, char **argv)
     {
         if (argc != 4)
-            throw std::range_error("Program Accepts 3 input parameters, Time (hh:mm), TimeZone(name), TimeZone(name)");
+            throw std::range_error("Program Accepts 3 input parameters, Time (hh:mm:ss), TimeZone(name), TimeZone(name)");
 
         std::string timeArgument = argv[1];
         auto timeSections = splitStringByDelimiter(timeArgument, ':');
