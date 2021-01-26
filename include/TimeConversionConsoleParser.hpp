@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <tuple>
+#include <map>
 
 class Time;
 class TimeZone;
@@ -9,26 +10,20 @@ namespace ConsoleParsers
 {
     using ConsoleArguments = std::vector<const char *>;
     using TimeConversionConsoleArguments = std::tuple<Time, TimeZone, TimeZone>;
+    using TimeConversionRawConsoleArguments = std::map<std::string, std::string>;
 
-    class ConsoleParser
-    {
-    public:
-        ConsoleParser() = delete;
-        virtual ~ConsoleParser() = default;
-        static int readConsoleArguments(int argc, char **argv);
-
-    protected:
-        static ConsoleArguments readArguments;
-    };
-
-    class TimeConversionConsoleParser : public ConsoleParser
+    class TimeConversionConsoleParser
     {
     public:
         TimeConversionConsoleParser() = delete;
         static TimeConversionConsoleArguments ParseTimeConversionArguments(int argc, char **argv);
 
     private:
-        static bool isTimeZoneImplemented(std::string timeZoneName);
+        static TimeConversionRawConsoleArguments validateTimeInCorrectFormat(std::string timeAsString);
+        static bool validateCorrectAmountOfArgumentsWasPassed(unsigned int numbersOfArguments);
+        static bool isStringANumber(const std::string &s);
+        static bool validateTimeZoneIsImplemented(std::string timeZoneName);
+        static constexpr unsigned int EXPECTED_AMOUNT_OF_ARGUMENTS = 4;
     };
 
     std::vector<std::string> splitStringByDelimiter(const std::string &text, char delim);

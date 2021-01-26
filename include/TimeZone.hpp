@@ -17,7 +17,7 @@ public:
     const char *getName() const;
     static Time CalculateTimeZoneDifferenceInUtc(const TimeZone &l_timeZone, const TimeZone &r_timeZone);
 
-protected:
+private:
     const Time utcTimeOffset;
     const char *timeZoneName;
 };
