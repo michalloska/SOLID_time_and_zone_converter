@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "../include/TimeConversionConsoleParser.hpp"
+#include "../include/ConsoleParser.hpp"
 #include "../include/TimeZoneConverterUtils.hpp"
 
 namespace

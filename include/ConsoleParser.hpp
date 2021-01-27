@@ -8,7 +8,6 @@ class TimeZone;
 
 namespace ConsoleParsers
 {
-    using ConsoleArguments = std::vector<const char *>;
     using TimeConversionConsoleArguments = std::tuple<Time, TimeZone, TimeZone>;
     using TimeConversionRawConsoleArguments = std::map<std::string, std::string>;
 
@@ -24,6 +23,7 @@ namespace ConsoleParsers
         static bool isStringANumber(const std::string &s);
         static bool validateTimeZoneIsImplemented(std::string timeZoneName);
         static constexpr unsigned int EXPECTED_AMOUNT_OF_ARGUMENTS = 4;
+        static constexpr unsigned int VALIDATION_ERROR_CODE = 1;
     };
 
     std::vector<std::string> splitStringByDelimiter(const std::string &text, char delim);

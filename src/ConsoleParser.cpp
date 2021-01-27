@@ -8,76 +8,130 @@
 
 namespace ConsoleParsers
 {
-    ConsoleArguments ConsoleParser::readArguments{};
-
-    int ConsoleParser::readConsoleArguments(int argc, char **argv)
-    {
-        for (int i = 0; i < argc; ++i)
-        {
-            readArguments.push_back(argv[i]);
-        }
-        return 0;
-    }
-
     TimeConversionConsoleArguments TimeConversionConsoleParser::ParseTimeConversionArguments(int argc, char **argv)
     {
-        if (argc != 4)
-            throw std::range_error("Program Accepts 3 input parameters, Time (hh:mm:ss), TimeZone(name), TimeZone(name)");
+        validateCorrectAmountOfArgumentsWasPassed(argc);
 
-        std::string timeArgument = argv[1];
-        auto timeSections = splitStringByDelimiter(timeArgument, ':');
-        auto hours = timeSections.at(0);
-        std::string minutes;
-        std::string seconds;
-        if (timeSections.size() == 3)
-        {
-            minutes = timeSections.at(1);
-            seconds = timeSections.at(2);
-        }
-        else if (timeSections.size() == 2)
-        {
-            minutes = timeSections.at(1);
-            seconds = "0";
-        }
-        else if (timeSections.size() == 1)
-        {
-            minutes = "0";
-            seconds = "0";
-        }
         std::string sourceTimeZoneArgument = argv[2];
         std::string destinationTimeZoneArgument = argv[3];
-        isTimeZoneImplemented(sourceTimeZoneArgument);
-        isTimeZoneImplemented(destinationTimeZoneArgument);
+        validateTimeZoneIsImplemented(sourceTimeZoneArgument);
+        validateTimeZoneIsImplemented(destinationTimeZoneArgument);
+
+        std::string timeArgument = argv[1];
+        auto timeSections = validateTimeInCorrectFormat(timeArgument);
 
         return std::make_tuple(
-            Time{std::stoi(hours), std::stoi(minutes), std::stoi(seconds)},
+            Time{std::stoi(timeSections["hours"]), std::stoi(timeSections["minutes"]), std::stoi(timeSections["seconds"])},
             TimeZoneConverterUtils::AvailableTimeZones.at(sourceTimeZoneArgument),
             TimeZoneConverterUtils::AvailableTimeZones.at(destinationTimeZoneArgument));
     }
 
-    bool TimeConversionConsoleParser::isTimeZoneImplemented(std::string timeZoneName)
+    bool TimeConversionConsoleParser::isStringANumber(const std::string &text)
+    {
+        return !text.empty() && std::find_if(text.begin(),
+                                             text.end(), [](unsigned char c) { return !std::isdigit(c); }) == text.end();
+    }
+
+    TimeConversionRawConsoleArguments TimeConversionConsoleParser::validateTimeInCorrectFormat(std::string timeAsString)
+    {
+        auto timeSections = splitStringByDelimiter(timeAsString, ':');
+        unsigned int timeSectionIter = 0;
+        const unsigned int hoursTimeSection = 0;
+        const unsigned int minutesTimeSection = 1;
+        const unsigned int secondsTimeSection = 2;
+        TimeConversionRawConsoleArguments fullTimeElements{
+            {"hours", "0"},
+            {"minutes", "0"},
+            {"seconds", "0"}};
+
+        for (auto &timeSection : timeSections)
+        {
+            if (not isStringANumber(timeSection))
+            {
+                std::cerr << "Provided Time is Invalid! Supported Format: (hh:mm:ss)" << std::endl
+                          << "\"" << timeSection << "\" Is not a number !" << std::endl;
+                exit(VALIDATION_ERROR_CODE);
+            }
+            if (timeSectionIter == hoursTimeSection)
+            {
+                fullTimeElements["hours"] = timeSection;
+                auto hoursDecimal = std::stoi(fullTimeElements["hours"]);
+                if (hoursDecimal < 0 or hoursDecimal > 24)
+                {
+                    std::cerr << std::endl
+                              << "Provided Time is Invalid! Supported Format: (hh:mm:ss)" << std::endl
+                              << timeSection << " Is not within the range [0;24]" << std::endl;
+                    exit(VALIDATION_ERROR_CODE);
+                }
+            }
+            else if (timeSectionIter == minutesTimeSection)
+            {
+                fullTimeElements["minutes"] = timeSection;
+                auto minutesDecimal = std::stoi(fullTimeElements["minutes"]);
+                if (minutesDecimal < 0 or minutesDecimal > 60)
+                {
+                    std::cerr << std::endl
+                              << "Provided Time is Invalid! Supported Format: (hh:mm:ss)" << std::endl
+                              << timeSection << " Is not within the range [0;60]" << std::endl;
+                    exit(VALIDATION_ERROR_CODE);
+                }
+            }
+            else if (timeSectionIter == secondsTimeSection)
+            {
+                fullTimeElements["seconds"] = timeSection;
+                auto minutesDecimal = std::stoi(fullTimeElements["seconds"]);
+                if (minutesDecimal < 0 or minutesDecimal > 60)
+                {
+                    std::cerr << std::endl
+                              << "Provided Time is Invalid! Supported Format: (hh:mm:ss)" << std::endl
+                              << timeSection << " Is not within the range [0;60]" << std::endl;
+                    exit(VALIDATION_ERROR_CODE);
+                }
+            }
+            ++timeSectionIter;
+        }
+        return fullTimeElements;
+    }
+
+    bool TimeConversionConsoleParser::validateTimeZoneIsImplemented(std::string timeZoneName)
     {
         try
         {
             TimeZoneConverterUtils::AvailableTimeZones.at(timeZoneName);
         }
-        catch (const std::exception &e)
+        catch (const std::out_of_range &e)
         {
-            throw std::invalid_argument(timeZoneName + " Is not a supported TimeZone (please add it in TimeZoneConverterUtils.hpp)");
+            std::cerr << std::endl
+                      << timeZoneName << " Is not a supported TimeZone (please add it in TimeZoneConverterUtils.hpp)" << std::endl;
+            TimeZoneConverterUtils::displayAvailableTimeZones();
+            exit(VALIDATION_ERROR_CODE);
         }
         return true;
+    }
+
+    bool TimeConversionConsoleParser::validateCorrectAmountOfArgumentsWasPassed(unsigned int numbersOfArguments)
+    {
+        if (numbersOfArguments == EXPECTED_AMOUNT_OF_ARGUMENTS)
+            return true;
+
+        std::cerr << std::endl
+                  << "Wrong amount of console arguments were passed in!" << std::endl
+                  << "EXPECTED 3: Time, Source Time Zone, Destination Time Zone" << std::endl
+                  << "Eg: make run TIME=11:55:45 SRCT=GMT DESTT=PDT" << std::endl;
+        TimeZoneConverterUtils::displayAvailableTimeZones();
+        exit(VALIDATION_ERROR_CODE);
     }
 
     std::vector<std::string> splitStringByDelimiter(const std::string &text, char delimiter)
     {
         std::stringstream ss(text);
         std::string item;
-        std::vector<std::string> elems;
+        std::vector<std::string> timeElements;
         while (std::getline(ss, item, delimiter))
         {
-            elems.push_back(item);
+            timeElements.push_back(item);
         }
-        return elems;
+        return timeElements;
     }
 
 } // namespace ConsoleParsers
