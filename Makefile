@@ -30,7 +30,7 @@ $(OBJ): $(SRC)
 .PHONY: clean run backup cB
 
 clean:
-	rm -f $(MAIN) $(OBJ) $(TEST_OBJECTS) $(TEST_DEP) $(DEP)
+	rm -f $(MAIN) $(OBJ) $(TEST_OBJECTS) $(wildcard ./src/*.o) $(wildcard ./src/*.d) $(wildcard ./tests/*.o) $(wildcard ./tests/*.d) $(TEST_DEP) $(DEP)
 
 run: $(MAIN)
 	./$(MAIN) $(TIME) $(SRCT) $(DESTT)
