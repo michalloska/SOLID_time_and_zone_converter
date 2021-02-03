@@ -1,10 +1,13 @@
+```
+  _______                                   __   _____                       ______                           __               
+ /_  __(_)___ ___  ___     ____ _____  ____/ /  /__  /  ____  ____  ___     / ____/___  ____ _   _____  _____/ /____  _____    
+  / / / / __ `__ \/ _ \   / __ `/ __ \/ __  /     / /  / __ \/ __ \/ _ \   / /   / __ \/ __ \ | / / _ \/ ___/ __/ _ \/ ___/    
+ / / / / / / / / /  __/  / /_/ / / / / /_/ /     / /__/ /_/ / / / /  __/  / /___/ /_/ / / / / |/ /  __/ /  / /_/  __/ /        
+/_/ /_/_/ /_/ /_/\___/   \__,_/_/ /_/\__,_/     /____/\____/_/ /_/\___/   \____/\____/_/ /_/|___/\___/_/   \__/\___/_/         
+                                                                                                                               
+```
 # solid-time-and-zone-converter
 Implement a simple converter allowing time convertion from GMT (Greenwich Mean) to  PDT (Pacific Daylight Time (North America)) and vice-versa. Converter should be implemented  in a way that allows extending it easily when adding new time zones.
-___
-## REMARK
-Writing this project in c++ turned out to be much more complicated/time consuming than anticipated at first. Therefore the project is not perfect and I am fully aware of it. Implementation of Time etc was very time consuming. 
-
-Almost all classes were tested except for ConsoleParser which was added in the last moment as I haven't noticed it was a requirement to run the program with console arguments.
 ___
 ## Author:
 Michał Loska
