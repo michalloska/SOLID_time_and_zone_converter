@@ -18,6 +18,23 @@ ___
 ### Compile:
 >make
 
+### Compile and/or Run (WITH CMAKE) </br>
+
+```
+1. mkdir build
+2. cd build
+3. cmake ..
+```
+compile:
+> make
+
+run UT tests:
+> make test 
+or:
+> ctest
+
+the above solution will not display failing tests if any occur. Please use <b> make run_tests </b> instead:
+
 ### Compile and/or Run: </br>
 Due to the fact a project like this requires using Makefile the program has to be run a bitt differently to what was written in documize:
 
