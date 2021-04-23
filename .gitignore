@@ -1,3 +1,4 @@
+/googletest
 /build
 *.o
 *.d
